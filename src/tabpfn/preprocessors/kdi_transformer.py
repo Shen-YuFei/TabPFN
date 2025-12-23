@@ -45,8 +45,14 @@ class KDITransformerWithNaN(KDITransformer):
     mean values and then fills the NaN values with NaNs after the transformation.
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(
+        self,
+        alpha: float = 1.0,
+        output_distribution: str = "normal",
+    ) -> None:
+        self.alpha = alpha
+        self.output_distribution = output_distribution
+        super().__init__(alpha=alpha, output_distribution=output_distribution)
 
     def _more_tags(self) -> dict:
         return {"allow_nan": True}
