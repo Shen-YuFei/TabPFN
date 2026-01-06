@@ -82,9 +82,9 @@ def clone_model_for_evaluation(
                 inference_config=new_inference_config,
             )
         else:
-            assert isinstance(original_model, TabPFNRegressor), (
-                "Unsupported model type for evaluation preparation."
-            )
+            assert isinstance(
+                original_model, TabPFNRegressor
+            ), "Unsupported model type for evaluation preparation."
             # Regressor also needs the distribution criterion copied
             new_bar_dist = copy.deepcopy(original_model.znorm_space_bardist_)
             model_spec_obj = RegressorModelSpecs(

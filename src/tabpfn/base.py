@@ -87,12 +87,14 @@ ModelSpecs = Union[RegressorModelSpecs, ClassifierModelSpecs]
 
 
 def initialize_tabpfn_model(
-    model_path: ModelPath
-    | list[ModelPath]
-    | RegressorModelSpecs
-    | ClassifierModelSpecs
-    | list[RegressorModelSpecs]
-    | list[ClassifierModelSpecs],
+    model_path: (
+        ModelPath
+        | list[ModelPath]
+        | RegressorModelSpecs
+        | ClassifierModelSpecs
+        | list[RegressorModelSpecs]
+        | list[ClassifierModelSpecs]
+    ),
     which: Literal["classifier", "regressor"],
     fit_mode: Literal["low_memory", "fit_preprocessors", "fit_with_cache"],
 ) -> tuple[
@@ -141,8 +143,12 @@ def initialize_tabpfn_model(
     ):
         _assert_inference_configs_equal(model_path)
         return (  # pyright: ignore[reportReturnType]
-            [spec.model for spec in model_path],  # pyright: ignore[reportAttributeAccessIssue]
-            [spec.architecture_config for spec in model_path],  # pyright: ignore[reportAttributeAccessIssue]
+            [
+                spec.model for spec in model_path
+            ],  # pyright: ignore[reportAttributeAccessIssue]
+            [
+                spec.architecture_config for spec in model_path
+            ],  # pyright: ignore[reportAttributeAccessIssue]
             model_path[0].norm_criterion,  # pyright: ignore[reportAttributeAccessIssue]
             model_path[0].inference_config,
         )
@@ -154,8 +160,12 @@ def initialize_tabpfn_model(
     ):
         _assert_inference_configs_equal(model_path)
         return (
-            [spec.model for spec in model_path],  # pyright: ignore[reportAttributeAccessIssue]
-            [spec.architecture_config for spec in model_path],  # pyright: ignore[reportAttributeAccessIssue]
+            [
+                spec.model for spec in model_path
+            ],  # pyright: ignore[reportAttributeAccessIssue]
+            [
+                spec.architecture_config for spec in model_path
+            ],  # pyright: ignore[reportAttributeAccessIssue]
             None,
             model_path[0].inference_config,
         )
@@ -163,7 +173,9 @@ def initialize_tabpfn_model(
     if (
         model_path is None
         or model_path == "auto"
-        or isinstance(model_path, (str, pathlib.Path, list))  # pyright: ignore[reportArgumentType]
+        or isinstance(
+            model_path, (str, pathlib.Path, list)
+        )  # pyright: ignore[reportArgumentType]
     ):
         if isinstance(model_path, list) and len(model_path) == 0:
             raise ValueError(

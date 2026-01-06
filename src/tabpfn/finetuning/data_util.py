@@ -309,9 +309,9 @@ class DatasetCollectionWithPreprocessing(torch.utils.data.Dataset):
             znorm_space_bardist_ = config.znorm_space_bardist_
             regression_task = True
         else:
-            assert isinstance(config, ClassifierDatasetConfig), (
-                "Invalid dataset config type"
-            )
+            assert isinstance(
+                config, ClassifierDatasetConfig
+            ), "Invalid dataset config type"
             conf = config.config
             x_full_raw = config.X_raw
             y_full_raw = config.y_raw
@@ -469,7 +469,9 @@ def meta_dataset_collator(batch: list, padding_val: float = 0.0) -> tuple:
                     )
                 else:
                     estim_list.append(
-                        list(batch[r][item_idx][estim_no] for r in range(batch_sz))  # noqa: C400
+                        list(
+                            batch[r][item_idx][estim_no] for r in range(batch_sz)
+                        )  # noqa: C400
                     )
             items_list.append(estim_list)
         elif isinstance(batch[0][item_idx], torch.Tensor):

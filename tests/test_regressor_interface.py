@@ -276,9 +276,9 @@ def test_multiple_models_predict_different_results(
     two_identical_models_pred = get_prediction(model_paths=two_identical_models)
     two_different_models_pred = get_prediction(model_paths=two_different_models)
 
-    assert not np.all(single_model_pred == single_model_pred[0:1]), (
-        "Predictions are identical for all samples, indicating trivial output"
-    )
+    assert not np.all(
+        single_model_pred == single_model_pred[0:1]
+    ), "Predictions are identical for all samples, indicating trivial output"
     assert np.all(single_model_pred == two_identical_models_pred)
     assert not np.all(single_model_pred == two_different_models_pred)
 
@@ -328,21 +328,21 @@ def test_regressor_in_pipeline(X_y: tuple[np.ndarray, np.ndarray]) -> None:
 
     # Test different prediction modes through the pipeline
     predictions_median = pipeline.predict(X, output_type="median")
-    assert predictions_median.shape == (X.shape[0],), (
-        "Median predictions shape is incorrect"
-    )
+    assert predictions_median.shape == (
+        X.shape[0],
+    ), "Median predictions shape is incorrect"
 
     predictions_mode = pipeline.predict(X, output_type="mode")
-    assert predictions_mode.shape == (X.shape[0],), (
-        "Mode predictions shape is incorrect"
-    )
+    assert predictions_mode.shape == (
+        X.shape[0],
+    ), "Mode predictions shape is incorrect"
 
     quantiles = pipeline.predict(X, output_type="quantiles", quantiles=[0.1, 0.9])
     assert isinstance(quantiles, list)
     assert len(quantiles) == 2
-    assert quantiles[0].shape == (X.shape[0],), (
-        "Quantile predictions shape is incorrect"
-    )
+    assert quantiles[0].shape == (
+        X.shape[0],
+    ), "Quantile predictions shape is incorrect"
 
 
 def test_dict_vs_object_preprocessor_config(X_y: tuple[np.ndarray, np.ndarray]) -> None:
@@ -665,20 +665,20 @@ def test_constant_target(
     model.fit(X, y_constant)
 
     predictions = model.predict(X)
-    assert np.all(predictions == constant_value), (
-        f"Predictions are not constant as expected for value {constant_value}"
-    )
+    assert np.all(
+        predictions == constant_value
+    ), f"Predictions are not constant as expected for value {constant_value}"
 
     # Test different output types
     predictions_median = model.predict(X, output_type="median")
-    assert np.all(predictions_median == constant_value), (
-        f"Median predictions are not constant as expected for value {constant_value}"
-    )
+    assert np.all(
+        predictions_median == constant_value
+    ), f"Median predictions are not constant as expected for value {constant_value}"
 
     predictions_mode = model.predict(X, output_type="mode")
-    assert np.all(predictions_mode == constant_value), (
-        f"Mode predictions are not constant as expected for value {constant_value}"
-    )
+    assert np.all(
+        predictions_mode == constant_value
+    ), f"Mode predictions are not constant as expected for value {constant_value}"
 
     quantiles = model.predict(X, output_type="quantiles", quantiles=[0.1, 0.9])
     for quantile_prediction in quantiles:
@@ -717,12 +717,12 @@ def test_initialize_model_variables_regressor_sets_required_attributes() -> None
         )
     )
     assert model is not None, "model should be initialized for regressor"
-    assert architecture_configs is not None, (
-        "config should be initialized for regressor"
-    )
-    assert norm_criterion is not None, (
-        "norm_criterion should be initialized for regressor"
-    )
+    assert (
+        architecture_configs is not None
+    ), "config should be initialized for regressor"
+    assert (
+        norm_criterion is not None
+    ), "norm_criterion should be initialized for regressor"
     assert inference_config is not None
 
     # 2) Test the sklearn-style wrapper on TabPFNRegressor
@@ -780,29 +780,29 @@ def test__TabPFNRegressor__few_features__works(n_features: int) -> None:
     check_is_fitted(returned_model)
 
     predictions = model.predict(X)
-    assert predictions.shape == (X.shape[0],), (
-        f"Predictions shape is incorrect for {n_features} features"
-    )
+    assert predictions.shape == (
+        X.shape[0],
+    ), f"Predictions shape is incorrect for {n_features} features"
     assert not np.isnan(predictions).any(), "Predictions contain NaN values"
     assert not np.isinf(predictions).any(), "Predictions contain infinite values"
 
     predictions_median = model.predict(X, output_type="median")
-    assert predictions_median.shape == (X.shape[0],), (
-        f"Median predictions shape is incorrect for {n_features} features"
-    )
+    assert predictions_median.shape == (
+        X.shape[0],
+    ), f"Median predictions shape is incorrect for {n_features} features"
 
     predictions_mode = model.predict(X, output_type="mode")
-    assert predictions_mode.shape == (X.shape[0],), (
-        f"Mode predictions shape is incorrect for {n_features} features"
-    )
+    assert predictions_mode.shape == (
+        X.shape[0],
+    ), f"Mode predictions shape is incorrect for {n_features} features"
 
     quantiles = model.predict(X, output_type="quantiles", quantiles=[0.1, 0.5, 0.9])
     assert isinstance(quantiles, list), "Quantiles should be returned as a list"
     assert len(quantiles) == 3, "Should return 3 quantiles"
     for i, q in enumerate(quantiles):
-        assert q.shape == (X.shape[0],), (
-            f"Quantile {i} shape is incorrect for {n_features} features"
-        )
+        assert q.shape == (
+            X.shape[0],
+        ), f"Quantile {i} shape is incorrect for {n_features} features"
 
 
 def test__create_default_for_version__v2__uses_correct_defaults() -> None:

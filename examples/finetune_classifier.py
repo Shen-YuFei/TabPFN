@@ -59,8 +59,12 @@ RANDOM_STATE = 0
 def calculate_roc_auc(y_true: np.ndarray, y_pred_proba: np.ndarray) -> float:
     """Calculate ROC AUC with binary vs. multiclass handling."""
     if len(np.unique(y_true)) == 2:
-        return roc_auc_score(y_true, y_pred_proba[:, 1])  # pyright: ignore[reportReturnType]
-    return roc_auc_score(y_true, y_pred_proba, multi_class="ovr")  # pyright: ignore[reportReturnType]
+        return roc_auc_score(
+            y_true, y_pred_proba[:, 1]
+        )  # pyright: ignore[reportReturnType]
+    return roc_auc_score(
+        y_true, y_pred_proba, multi_class="ovr"
+    )  # pyright: ignore[reportReturnType]
 
 
 def main() -> None:

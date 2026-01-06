@@ -398,9 +398,9 @@ def test_multiple_models_predict_different_logits(X_y: tuple[np.ndarray, np.ndar
     two_identical_models_logits = get_averaged_logits(model_paths=two_identical_models)
     two_different_models_logits = get_averaged_logits(model_paths=two_different_models)
 
-    assert not np.all(single_model_logits == single_model_logits[:, 0:1]), (
-        "Logits are identical across classes for all samples, indicating trivial output"
-    )
+    assert not np.all(
+        single_model_logits == single_model_logits[:, 0:1]
+    ), "Logits are identical across classes for all samples, indicating trivial output"
     assert np.all(single_model_logits == two_identical_models_logits)
     assert not np.all(single_model_logits == two_different_models_logits)
 
@@ -428,9 +428,9 @@ def test_softmax_temperature_impact_on_logits_magnitude(
     model_high_temp.fit(X, y)
     logits_high_temp = model_high_temp.predict_logits(X)
 
-    assert np.mean(np.abs(logits_low_temp)) > np.mean(np.abs(logits_high_temp)), (
-        "Low softmax temperature did not result in more extreme logits."
-    )
+    assert np.mean(np.abs(logits_low_temp)) > np.mean(
+        np.abs(logits_high_temp)
+    ), "Low softmax temperature did not result in more extreme logits."
 
     model_temp_one = TabPFNClassifier(
         softmax_temperature=1.0, n_estimators=1, device="cpu", random_state=42
@@ -438,12 +438,12 @@ def test_softmax_temperature_impact_on_logits_magnitude(
     model_temp_one.fit(X, y)
     logits_temp_one = model_temp_one.predict_logits(X)
 
-    assert not np.allclose(logits_temp_one, logits_low_temp, atol=1e-6), (
-        "Logits did not change with low temperature."
-    )
-    assert not np.allclose(logits_temp_one, logits_high_temp, atol=1e-6), (
-        "Logits did not change with high temperature."
-    )
+    assert not np.allclose(
+        logits_temp_one, logits_low_temp, atol=1e-6
+    ), "Logits did not change with low temperature."
+    assert not np.allclose(
+        logits_temp_one, logits_high_temp, atol=1e-6
+    ), "Logits did not change with high temperature."
 
 
 def test_balance_probabilities_alters_proba_output() -> None:
@@ -487,9 +487,9 @@ def test_balance_probabilities_alters_proba_output() -> None:
     model_balance.fit(X_subset, y_imbalanced)
     proba_balance = model_balance.predict_proba(X_subset)
 
-    assert not np.allclose(proba_no_balance, proba_balance, atol=1e-5), (
-        "Probabilities did not change when balance_probabilities was toggled."
-    )
+    assert not np.allclose(
+        proba_no_balance, proba_balance, atol=1e-5
+    ), "Probabilities did not change when balance_probabilities was toggled."
 
 
 @pytest.mark.skip(
@@ -594,9 +594,9 @@ def test_balanced_probabilities() -> None:
     # Balanced should be MORE uniform than unbalanced
     balanced_deviation = np.std(mean_proba_balanced)
     unbalanced_deviation = np.std(mean_proba_unbalanced)
-    assert balanced_deviation < unbalanced_deviation, (
-        "Balancing did not make probabilities more uniform"
-    )
+    assert (
+        balanced_deviation < unbalanced_deviation
+    ), "Balancing did not make probabilities more uniform"
 
 
 def test_classifier_in_pipeline(X_y: tuple[np.ndarray, np.ndarray]) -> None:
@@ -898,9 +898,9 @@ def test_initialize_model_variables_classifier_sets_required_attributes() -> Non
         )
     )
     assert models is not None, "model should be initialized for classifier"
-    assert architecture_configs is not None, (
-        "config should be initialized for classifier"
-    )
+    assert (
+        architecture_configs is not None
+    ), "config should be initialized for classifier"
     assert norm_criterion is None, "norm_criterion should be None for classifier"
     assert inference_config is not None
 
@@ -968,9 +968,9 @@ def test__TabPFNClassifier__few_features__works(n_features: int) -> None:
     assert np.allclose(probabilities.sum(axis=1), 1.0), "Probabilities do not sum to 1"
 
     predictions = model.predict(X)
-    assert predictions.shape == (X.shape[0],), (
-        f"Predictions shape is incorrect for {n_features} features"
-    )
+    assert predictions.shape == (
+        X.shape[0],
+    ), f"Predictions shape is incorrect for {n_features} features"
     accuracy = accuracy_score(y, predictions)
     assert accuracy > 0.3, f"Accuracy too low with {n_features} features: {accuracy}"
 

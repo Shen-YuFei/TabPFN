@@ -469,7 +469,9 @@ class PerFeatureTransformer(Architecture):
         ):
             # Transform cat. features accordingly to correspond to following to merge
             # of batch and feature_group dimensions below (i.e., concat lists)
-            extra_encoders_args["categorical_inds"] = sum(categorical_inds_to_use, [])  # noqa: RUF017
+            extra_encoders_args["categorical_inds"] = sum(
+                categorical_inds_to_use, []
+            )  # noqa: RUF017
 
         for k in x:
             x[k] = einops.rearrange(x[k], "b s f n -> s (b f) n")

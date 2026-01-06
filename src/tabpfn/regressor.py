@@ -208,13 +208,15 @@ class TabPFNRegressor(RegressorMixin, BaseEstimator):
         categorical_features_indices: Sequence[int] | None = None,
         softmax_temperature: float = 0.9,
         average_before_softmax: bool = False,
-        model_path: str
-        | Path
-        | list[str]
-        | list[Path]
-        | Literal["auto"]
-        | RegressorModelSpecs
-        | list[RegressorModelSpecs] = "auto",
+        model_path: (
+            str
+            | Path
+            | list[str]
+            | list[Path]
+            | Literal["auto"]
+            | RegressorModelSpecs
+            | list[RegressorModelSpecs]
+        ) = "auto",
         device: DevicesSpecification = "auto",
         ignore_pretraining_limits: bool = False,
         inference_precision: _dtype | Literal["autocast", "auto"] = "auto",

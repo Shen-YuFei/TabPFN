@@ -437,9 +437,11 @@ class FinetunedTabPFNClassifier(BaseEstimator, ClassifierMixin):
 
                 logger.info(
                     "Using LambdaLR %s schedule: total_steps=%d, warmup_steps=%d",
-                    "warmup-only (constant LR after warmup)"
-                    if self.lr_warmup_only
-                    else "warmup+cosine",
+                    (
+                        "warmup-only (constant LR after warmup)"
+                        if self.lr_warmup_only
+                        else "warmup+cosine"
+                    ),
                     total_steps,
                     warmup_steps,
                 )

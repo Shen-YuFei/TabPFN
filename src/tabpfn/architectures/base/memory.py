@@ -47,9 +47,9 @@ def support_save_peak_mem_factor(method: MethodType) -> Callable:
         **kwargs: Any,
     ) -> torch.Tensor:
         assert isinstance(self, torch.nn.Module)
-        assert save_peak_mem_factor is None or allow_inplace, (
-            "The parameter save_peak_mem_factor only supported with 'allow_inplace' set"
-        )
+        assert (
+            save_peak_mem_factor is None or allow_inplace
+        ), "The parameter save_peak_mem_factor only supported with 'allow_inplace' set"
         assert isinstance(x, torch.Tensor)
 
         tensor_inputs = list(tuple(self.parameters()) + tuple(args))
@@ -67,9 +67,11 @@ def support_save_peak_mem_factor(method: MethodType) -> Callable:
 
             split_args = zip(
                 *[
-                    torch.split(arg, split_size)
-                    if isinstance(arg, torch.Tensor)
-                    else [arg] * save_peak_mem_factor
+                    (
+                        torch.split(arg, split_size)
+                        if isinstance(arg, torch.Tensor)
+                        else [arg] * save_peak_mem_factor
+                    )
                     for arg in (x, *args)
                 ],
             )

@@ -404,9 +404,9 @@ def test_checkpoint_saving_and_loading(
 
     # Verify interval checkpoints exist
     checkpoint_files = sorted(output_folder.glob("checkpoint_*_[0-9]*.pth"))
-    assert len(checkpoint_files) >= 2, (
-        "At least two interval checkpoints should be saved"
-    )
+    assert (
+        len(checkpoint_files) >= 2
+    ), "At least two interval checkpoints should be saved"
 
     # Check specific epoch checkpoints
     epoch_2_checkpoint = output_folder / "checkpoint_70_2.pth"
@@ -487,9 +487,9 @@ def test_checkpoint_resumption(
     assert epoch_2_checkpoint.exists(), "Checkpoint at epoch 2 should exist"
 
     best_checkpoint_path = output_folder / "checkpoint_70_best.pth"
-    assert best_checkpoint_path.exists(), (
-        "Best checkpoint should exist after first training"
-    )
+    assert (
+        best_checkpoint_path.exists()
+    ), "Best checkpoint should exist after first training"
 
     # Resume training for another 2 epochs (total 4)
     finetuned_clf_resumed = FinetunedTabPFNClassifier(
@@ -517,9 +517,9 @@ def test_checkpoint_resumption(
         finetuned_clf_resumed.fit(X_train, y_train, output_dir=output_folder)
 
     epoch_4_checkpoint = output_folder / "checkpoint_70_4.pth"
-    assert epoch_4_checkpoint.exists(), (
-        "Checkpoint at epoch 4 should exist after resumption"
-    )
+    assert (
+        epoch_4_checkpoint.exists()
+    ), "Checkpoint at epoch 4 should exist after resumption"
 
     assert best_checkpoint_path.exists()
 
@@ -631,9 +631,9 @@ def test_checkpoint_interval_configuration(
     # Verify no checkpoints at epochs 1, 2, 4, 5
     for epoch in [1, 2, 4, 5]:
         checkpoint_path = output_folder / f"checkpoint_70_{epoch}.pth"
-        assert not checkpoint_path.exists(), (
-            f"Checkpoint at epoch {epoch} should not exist"
-        )
+        assert (
+            not checkpoint_path.exists()
+        ), f"Checkpoint at epoch {epoch} should not exist"
 
     # Verify best checkpoint exists
     best_checkpoint_path = output_folder / "checkpoint_70_best.pth"
@@ -691,9 +691,9 @@ def test_best_checkpoint_saving(
 
     # Verify no interval checkpoints exist (since checkpoint_interval=None)
     interval_checkpoints = list(output_folder.glob("checkpoint_70_[0-9]*.pth"))
-    assert len(interval_checkpoints) == 0, (
-        "No interval checkpoints should exist when checkpoint_interval=None"
-    )
+    assert (
+        len(interval_checkpoints) == 0
+    ), "No interval checkpoints should exist when checkpoint_interval=None"
 
 
 # =============================================================================
@@ -754,9 +754,9 @@ def test_datasetcollectionwithpreprocessing_classification_single_dataset(
     processed_dataset_item = dataset_collection[item_index]
 
     assert isinstance(processed_dataset_item, tuple)
-    assert len(processed_dataset_item) == 6, (
-        "Item tuple should have 6 elements for classification"
-    )
+    assert (
+        len(processed_dataset_item) == 6
+    ), "Item tuple should have 6 elements for classification"
 
     (
         X_trains_preprocessed,
@@ -802,16 +802,16 @@ def test_datasetcollectionwithpreprocessing_classification_multiple_datasets(
     )
 
     assert isinstance(dataset_collection, DatasetCollectionWithPreprocessing)
-    assert len(dataset_collection) == len(datasets), (
-        "Collection should contain one item per dataset"
-    )
+    assert len(dataset_collection) == len(
+        datasets
+    ), "Collection should contain one item per dataset"
 
     for item_index in range(len(datasets)):
         processed_dataset_item = dataset_collection[item_index]
         assert isinstance(processed_dataset_item, tuple)
-        assert len(processed_dataset_item) == 6, (
-            "Item tuple should have 6 elements for classification"
-        )
+        assert (
+            len(processed_dataset_item) == 6
+        ), "Item tuple should have 6 elements for classification"
         (
             X_trains_preprocessed,
             _X_tests_preprocessed,
@@ -857,14 +857,14 @@ def test_dataset_and_collator_with_dataloader_uniform(
         assert isinstance(batch, tuple)
         X_trains, _X_tests, y_trains, _y_tests, _cat_ixs, _confs = batch
         for est_tensor in X_trains:
-            assert isinstance(est_tensor, torch.Tensor), (
-                "Each estimator's batch should be a tensor."
-            )
+            assert isinstance(
+                est_tensor, torch.Tensor
+            ), "Each estimator's batch should be a tensor."
             assert est_tensor.shape[0] == batch_size
         for est_tensor in y_trains:
-            assert isinstance(est_tensor, torch.Tensor), (
-                "Each estimator's batch should be a tensor for labels."
-            )
+            assert isinstance(
+                est_tensor, torch.Tensor
+            ), "Each estimator's batch should be a tensor for labels."
             assert est_tensor.shape[0] == batch_size
         break  # Only check one batch
 
@@ -966,9 +966,9 @@ def test_forward_runs(
     assert preds.shape[0] == X_test.shape[0], "Mismatch in test sample count"
     assert preds.shape[1] == clf.n_classes_, "Mismatch in class count"
     probs_sum = preds.sum(dim=1)
-    assert torch.allclose(probs_sum, torch.ones_like(probs_sum), atol=1e-5), (
-        "Probabilities do not sum to 1"
-    )
+    assert torch.allclose(
+        probs_sum, torch.ones_like(probs_sum), atol=1e-5
+    ), "Probabilities do not sum to 1"
 
 
 def test_fit_from_preprocessed_runs(
@@ -1006,9 +1006,9 @@ def test_fit_from_preprocessed_runs(
         assert preds.shape[1] == clf.n_classes_
 
         probs_sum = preds.sum(dim=1)
-        assert torch.allclose(probs_sum, torch.ones_like(probs_sum), atol=1e-5), (
-            "Probabilities do not sum to 1"
-        )
+        assert torch.allclose(
+            probs_sum, torch.ones_like(probs_sum), atol=1e-5
+        ), "Probabilities do not sum to 1"
         break
 
 
@@ -1065,12 +1065,12 @@ def test_finetuning_consistency_preprocessing_classifier() -> None:
 
     clf_standard.fit(X_train_raw, y_train_raw)
     # Ensure the internal model attribute exists after fit
-    assert hasattr(clf_standard, "models_"), (
-        "Standard classifier models_ not found after fit."
-    )
-    assert hasattr(clf_standard.models_[0], "forward"), (
-        "Standard classifier models_[0].forward not found after fit."
-    )
+    assert hasattr(
+        clf_standard, "models_"
+    ), "Standard classifier models_ not found after fit."
+    assert hasattr(
+        clf_standard.models_[0], "forward"
+    ), "Standard classifier models_[0].forward not found after fit."
 
     tensor_p1_full = None
     # Patch the standard classifier's *internal model's* forward method
@@ -1083,9 +1083,9 @@ def test_finetuning_consistency_preprocessing_classifier() -> None:
 
         # Capture the tensor input 'x' (usually the second positional argument)
         call_args_list = mock_forward_p1.call_args_list
-        assert len(call_args_list) > 0, (
-            "No calls recorded for standard models_[0].forward."
-        )
+        assert (
+            len(call_args_list) > 0
+        ), "No calls recorded for standard models_[0].forward."
         assert len(call_args_list[0].args) > 1, (
             f"Standard models_[0].forward call had "
             f"unexpected arguments: {call_args_list[0].args}"
@@ -1130,12 +1130,12 @@ def test_finetuning_consistency_preprocessing_classifier() -> None:
     X_trains_p2, X_tests_p2, y_trains_p2, _, cat_ixs_p2, confs_p2, *_ = data_batch
 
     clf_batched.fit_from_preprocessed(X_trains_p2, y_trains_p2, cat_ixs_p2, confs_p2)
-    assert hasattr(clf_batched, "models_"), (
-        "Batched classifier models_ not found after fit_from_preprocessed."
-    )
-    assert hasattr(clf_batched.models_[0], "forward"), (
-        "Batched classifier models_[0].forward not found after fit_from_preprocessed."
-    )
+    assert hasattr(
+        clf_batched, "models_"
+    ), "Batched classifier models_ not found after fit_from_preprocessed."
+    assert hasattr(
+        clf_batched.models_[0], "forward"
+    ), "Batched classifier models_[0].forward not found after fit_from_preprocessed."
 
     # Step 3c: Call forward and capture the input tensor
     # to the *internal transformer model*
@@ -1149,9 +1149,9 @@ def test_finetuning_consistency_preprocessing_classifier() -> None:
 
         # Capture the tensor input 'x' (assuming same argument position as Path 1)
         call_args_list = mock_forward_p2.call_args_list
-        assert len(call_args_list) > 0, (
-            "No calls recorded for batched models_[0].forward."
-        )
+        assert (
+            len(call_args_list) > 0
+        ), "No calls recorded for batched models_[0].forward."
         assert len(call_args_list[0].args) > 1, (
             f"Batched models_[0].forward call had "
             f"unexpected arguments: {call_args_list[0].args}"
@@ -1174,9 +1174,9 @@ def test_finetuning_consistency_preprocessing_classifier() -> None:
     tensor_p2_full = tensor_p2_full.cpu().squeeze(0)
 
     # Final check of shapes after potential squeeze
-    assert tensor_p1_full.shape == tensor_p2_full.shape, (
-        "Shapes of final model input tensors mismatch after squeeze."
-    )
+    assert (
+        tensor_p1_full.shape == tensor_p2_full.shape
+    ), "Shapes of final model input tensors mismatch after squeeze."
 
     # Perform numerical comparison using torch.allclose
     # Use a reasonably small tolerance. Preprocessing should be near-identical.

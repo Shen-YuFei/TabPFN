@@ -487,7 +487,9 @@ class InferenceEngineBatchedNoPreprocessing(SingleDeviceInferenceEngine):
                     train_x_full.transpose(0, 1),
                     train_y_batch.transpose(0, 1),
                     only_return_standard_out=True,
-                    categorical_inds=list([cat_item[i] for cat_item in self.cat_ix]),  # noqa: C411
+                    categorical_inds=list(
+                        [cat_item[i] for cat_item in self.cat_ix]
+                    ),  # noqa: C411
                 )
 
             yield output, self.ensemble_configs[i]
@@ -767,10 +769,14 @@ class InferenceEngineCacheKV(SingleDeviceInferenceEngine):
             ens_model = deepcopy(models[config._model_index])
             ens_model = ens_model.to(device)
             if not isinstance(X, torch.Tensor):
-                X = torch.as_tensor(X, dtype=torch.float32, device=device)  # noqa: PLW2901
+                X = torch.as_tensor(
+                    X, dtype=torch.float32, device=device
+                )  # noqa: PLW2901
             X = X.unsqueeze(1)  # noqa: PLW2901
             if not isinstance(y, torch.Tensor):
-                y = torch.as_tensor(y, dtype=torch.float32, device=device)  # noqa: PLW2901
+                y = torch.as_tensor(
+                    y, dtype=torch.float32, device=device
+                )  # noqa: PLW2901
 
             batched_preprocessor_cat_ix = [preprocessor_cat_ix]
 

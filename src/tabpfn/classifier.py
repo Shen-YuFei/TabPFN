@@ -189,13 +189,15 @@ class TabPFNClassifier(ClassifierMixin, BaseEstimator):
         softmax_temperature: float = 0.9,
         balance_probabilities: bool = False,
         average_before_softmax: bool = False,
-        model_path: str
-        | Path
-        | list[str]
-        | list[Path]
-        | Literal["auto"]
-        | ClassifierModelSpecs
-        | list[ClassifierModelSpecs] = "auto",
+        model_path: (
+            str
+            | Path
+            | list[str]
+            | list[Path]
+            | Literal["auto"]
+            | ClassifierModelSpecs
+            | list[ClassifierModelSpecs]
+        ) = "auto",
         device: DevicesSpecification = "auto",
         ignore_pretraining_limits: bool = False,
         inference_precision: _dtype | Literal["autocast", "auto"] = "auto",
@@ -636,9 +638,11 @@ class TabPFNClassifier(ClassifierMixin, BaseEstimator):
             polynomial_features=self.inference_config_.POLYNOMIAL_FEATURES,
             max_index=len(X),
             preprocessor_configs=preprocessor_configs,
-            class_shift_method=self.inference_config_.CLASS_SHIFT_METHOD
-            if not self.differentiable_input
-            else None,
+            class_shift_method=(
+                self.inference_config_.CLASS_SHIFT_METHOD
+                if not self.differentiable_input
+                else None
+            ),
             n_classes=self.n_classes_,
             random_state=rng,
             num_models=len(self.models_),

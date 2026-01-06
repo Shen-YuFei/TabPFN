@@ -139,9 +139,9 @@ def _get_subsample_indices_for_estimators(
             )
             subsample_samples = subsample_samples[:num_estimators]
         for subsample in subsample_samples:
-            assert len(subsample) > 0, (
-                "Length of subsampled indices must be larger than 0"
-            )
+            assert (
+                len(subsample) > 0
+            ), "Length of subsampled indices must be larger than 0"
         balance_count = num_estimators // len(subsample_samples)
         subsample_indices = _balance(subsample_samples, balance_count)
         leftover = num_estimators % len(subsample_samples)

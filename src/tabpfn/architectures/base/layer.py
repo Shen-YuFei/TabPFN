@@ -191,9 +191,9 @@ class PerFeatureEncoderLayer(Module):
             device=device,
             dtype=dtype,
             config=config,
-            share_kv_across_n_heads=config.nhead
-            if config.multiquery_item_attention
-            else 1,
+            share_kv_across_n_heads=(
+                config.nhead if config.multiquery_item_attention else 1
+            ),
             initialize_output_to_zero=zero_init,
             precomputed_k=precomputed_k,
             precomputed_v=precomputed_v,
@@ -279,17 +279,17 @@ class PerFeatureEncoderLayer(Module):
         Returns:
             The transformer state passed through the encoder layer.
         """
-        assert len(state.shape) == 4, (
-            "src must be of shape (batch_size, num_items, num feature blocks, d_model)"
-        )
+        assert (
+            len(state.shape) == 4
+        ), "src must be of shape (batch_size, num_items, num feature blocks, d_model)"
         if cache_trainset_representation and not single_eval_pos:
             assert self.self_attn_between_items.has_cached_kv
             save_peak_mem_factor = None
 
         if att_src is not None:
-            assert not self.multiquery_item_attention_for_test_set, (
-                "Not implemented yet."
-            )
+            assert (
+                not self.multiquery_item_attention_for_test_set
+            ), "Not implemented yet."
             assert not cache_trainset_representation, "Not implemented yet."
             assert not single_eval_pos, (
                 "single_eval_pos should not be set, as the train representation"
@@ -319,9 +319,11 @@ class PerFeatureEncoderLayer(Module):
                 if single_eval_pos < x.shape[1]:
                     new_x_test = self.self_attn_between_items(
                         x[:, single_eval_pos:].transpose(1, 2),
-                        x[:, :single_eval_pos].transpose(1, 2)
-                        if single_eval_pos
-                        else None,
+                        (
+                            x[:, :single_eval_pos].transpose(1, 2)
+                            if single_eval_pos
+                            else None
+                        ),
                         save_peak_mem_factor=save_peak_mem_factor,
                         cache_kv=False,
                         add_input=True,
@@ -384,13 +386,15 @@ class PerFeatureEncoderLayer(Module):
             attn_between_items,
             partial(
                 self.mlp.__call__,
-                save_peak_mem_factor=mlp_save_peak_mem_factor
-                if (
-                    mlp_save_peak_mem_factor is not None
-                    and state.numel() // state.shape[-1] // mlp_save_peak_mem_factor
-                )
-                > 32
-                else None,
+                save_peak_mem_factor=(
+                    mlp_save_peak_mem_factor
+                    if (
+                        mlp_save_peak_mem_factor is not None
+                        and state.numel() // state.shape[-1] // mlp_save_peak_mem_factor
+                    )
+                    > 32
+                    else None
+                ),
                 add_input=True,
                 allow_inplace=True,
             ),

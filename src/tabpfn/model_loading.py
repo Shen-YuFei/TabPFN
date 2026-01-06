@@ -301,7 +301,9 @@ def _try_direct_downloads(
     for model_url, config_url in url_pairs:
         logger.info(f"Attempting download from {model_url}")
         try:
-            with urllib.request.urlopen(model_url, timeout=180) as response:  # noqa: S310
+            with urllib.request.urlopen(
+                model_url, timeout=180
+            ) as response:  # noqa: S310
                 if response.status != 200:
                     raise URLError(
                         f"HTTP {response.status} when downloading from {model_url}",
@@ -310,7 +312,9 @@ def _try_direct_downloads(
 
             config_path = base_path.parent / "config.json"
             try:
-                with urllib.request.urlopen(config_url, timeout=180) as response:  # noqa: S310
+                with urllib.request.urlopen(
+                    config_url, timeout=180
+                ) as response:  # noqa: S310
                     if response.status == 200:
                         config_path.write_bytes(response.read())
             except Exception:  # noqa: BLE001
